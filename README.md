@@ -330,108 +330,7 @@ General conversation without concerning symptoms
 - CORS configuration
 - Rate limiting (recommended for production)
 
-## 🧪 Testing
 
-### Manual Testing
-
-1. **Test Patient Creation**
-```bash
-curl -X POST http://localhost:5000/api/patients \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test Patient",
-    "phone": "+918639764379",
-    "surgery_type": "Knee Replacement",
-    "surgery_date": "2024-02-26",
-    "assigned_doctor_id": "D-101"
-  }'
-```
-
-2. **Test WhatsApp Webhook**
-```bash
-curl -X POST http://localhost:5000/api/webhook/whatsapp \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "From=whatsapp:+918639764379&Body=I have severe chest pain"
-```
-
-3. **Test Manual WhatsApp Message**
-```bash
-curl -X POST http://localhost:5000/api/patients/P-12345/send-message \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello, how are you feeling today?"}'
-```
-
-## 📊 Database Schema
-
-### Patients Table
-```sql
-CREATE TABLE patients (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  phone TEXT NOT NULL UNIQUE,
-  surgery_type TEXT NOT NULL,
-  surgery_date TEXT NOT NULL,
-  days_since_surgery INTEGER NOT NULL,
-  recovery_score INTEGER DEFAULT 100,
-  risk_status TEXT CHECK(risk_status IN ('LOW', 'MEDIUM', 'HIGH')),
-  assigned_doctor_id TEXT,
-  known_risk_factors TEXT,
-  created_at TEXT DEFAULT (datetime('now')),
-  FOREIGN KEY (assigned_doctor_id) REFERENCES doctors(id)
-);
-```
-
-### Alerts Table
-```sql
-CREATE TABLE alerts (
-  id TEXT PRIMARY KEY,
-  patient_id TEXT NOT NULL,
-  severity TEXT CHECK(severity IN ('LOW', 'MEDIUM', 'HIGH')),
-  status TEXT CHECK(status IN ('PENDING', 'RESOLVED', 'ESCALATED')),
-  assigned_doctor_id TEXT,
-  reason TEXT NOT NULL,
-  routing_history TEXT DEFAULT '[]',
-  triage_data TEXT,
-  created_at TEXT DEFAULT (datetime('now')),
-  resolved_at TEXT,
-  FOREIGN KEY (patient_id) REFERENCES patients(id),
-  FOREIGN KEY (assigned_doctor_id) REFERENCES doctors(id)
-);
-```
-
-### Doctors Table
-```sql
-CREATE TABLE doctors (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  specialization TEXT NOT NULL,
-  status TEXT CHECK(status IN ('AVAILABLE', 'BUSY', 'OFFLINE')),
-  email TEXT,
-  phone TEXT,
-  created_at TEXT DEFAULT (datetime('now'))
-);
-```
-
-## 🚀 Deployment
-
-### Production Checklist
-
-- [ ] Set `NODE_ENV=production`
-- [ ] Use production database (PostgreSQL recommended)
-- [ ] Enable Twilio webhook signature validation
-- [ ] Set up SSL/TLS certificates
-- [ ] Configure CORS for production domain
-- [ ] Set up monitoring and logging
-- [ ] Enable rate limiting
-- [ ] Set up backup strategy
-- [ ] Configure environment variables securely
-- [ ] Test all endpoints in production
-
-### Recommended Hosting
-
-**Frontend**: Vercel, Netlify, or AWS Amplify
-**Backend**: Railway, Render, or AWS EC2
-**Database**: PostgreSQL on Railway or AWS RDS
 
 ## 🤝 Contributing
 
@@ -443,30 +342,6 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Authors
-
-- **Harshit** - [GitHub](https://github.com/warshit)
-
-## 🙏 Acknowledgments
-
-- Google Gemini AI for advanced language understanding
-- Twilio for WhatsApp Business API
-- shadcn/ui for beautiful UI components
-- React and TypeScript communities
-
-## 📞 Support
-
-For support, email your-email@example.com or open an issue on GitHub.
-
-## 🔗 Links
-
-- **Repository**: https://github.com/warshit/Autonomous-Patient-Follow-up-Agent
-- **Issues**: https://github.com/warshit/Autonomous-Patient-Follow-up-Agent/issues
-- **Documentation**: See project wiki (coming soon)
 
 ## 📈 Roadmap
 
@@ -486,3 +361,5 @@ For support, email your-email@example.com or open an issue on GitHub.
 **Built with ❤️ for better healthcare**
 
 ⭐ Star this repo if you find it helpful!
+---
+-By varshith
